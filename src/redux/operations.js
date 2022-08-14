@@ -12,18 +12,18 @@ const authToken = {
 export const registerUser = createAsyncThunk(
     'user/register',
     async userData => {
-        const response = await axios.post('/users/signup', userData);
-        const token = response.data.token;
+        const { data } = await axios.post('/users/signup', userData);
+        const token = data.token;
         authToken.set(token);
-        return response.data;
+        return data;
     },
 );
 
 export const logInUser = createAsyncThunk('user/logIn', async userData => {
-    const response = await axios.post('/users/login', userData);
-    const token = response.data.token;
+    const { data } = await axios.post('/users/login', userData);
+    const token = data.token;
     authToken.set(token);
-    return response.data;
+    return data;
 });
 
 export const logOutUser = createAsyncThunk('user/logOut', async () => {
@@ -31,11 +31,28 @@ export const logOutUser = createAsyncThunk('user/logOut', async () => {
     authToken.unset();
 });
 
+export const fetchCurrentUser = createAsyncThunk(
+    'user/fetchCurrent',
+    async (_, thunkAPI) => {
+        const state = thunkAPI.getState();
+        const persistedToken = state.user.token;
+
+        if (!persistedToken) {
+            return thunkAPI.rejectWithValue(null);
+        }
+
+        authToken.set(persistedToken);
+
+        const { data } = await axios.get('/users/current');
+        return data;
+    },
+);
+
 export const fetchContacts = createAsyncThunk(
     'contacts/fetchContacts',
     async () => {
-        const contacts = await axios.get('/contacts').then(({ data }) => data);
-        return contacts;
+        const { data } = await axios.get('/contacts');
+        return data;
     },
 );
 
@@ -52,9 +69,7 @@ export const addContact = createAsyncThunk(
 export const deleteContact = createAsyncThunk(
     'contacts/deleteContact',
     async id => {
-        const idToDelete = await axios
-            .delete(`/contacts/${id}`)
-            .then(({ data }) => data.id);
-        return idToDelete;
+        await axios.delete(`/contacts/${id}`);
+        return id;
     },
 );

@@ -7,6 +7,7 @@ import {
     registerUser,
     logInUser,
     logOutUser,
+    fetchCurrentUser,
 } from './operations';
 
 const itemsReducer = createReducer([], {
@@ -30,6 +31,9 @@ const loadingReducer = createReducer(false, {
     [deleteContact.pending]: () => true,
     [deleteContact.fulfilled]: () => false,
     [deleteContact.rejected]: () => false,
+    [fetchCurrentUser.pending]: () => true,
+    [fetchCurrentUser.fulfilled]: () => false,
+    [fetchCurrentUser.rejected]: () => false,
     [registerUser.pending]: () => true,
     [registerUser.fulfilled]: () => false,
     [registerUser.rejected]: () => false,
@@ -48,6 +52,8 @@ const errorReducer = createReducer(null, {
     [addContact.pending]: () => null,
     [deleteContact.rejected]: (_, { error }) => error.message,
     [deleteContact.pending]: () => null,
+    [fetchCurrentUser.rejected]: (_, { error }) => error.message,
+    [fetchCurrentUser.pending]: () => null,
     [registerUser.rejected]: (_, { error }) => error.message,
     [registerUser.pending]: () => null,
     [logInUser.rejected]: (_, { error }) => error.message,
@@ -56,15 +62,22 @@ const errorReducer = createReducer(null, {
     [logOutUser.pending]: () => null,
 });
 
-const user = createSlice({
+const userSlice = createSlice({
     name: 'user',
     initialState: {
         name: null,
         email: null,
         token: null,
         isLoggedIn: false,
+        isFetching: false,
     },
     extraReducers: {
+        [fetchCurrentUser.fulfilled]: (state, { payload }) => {
+            state.name = payload.name;
+            state.email = payload.email;
+            state.isLoggedIn = true;
+            state.isFetching = false;
+        },
         [registerUser.fulfilled]: (state, { payload }) => {
             state.name = payload.user.name;
             state.email = payload.user.email;
@@ -83,9 +96,15 @@ const user = createSlice({
             state.token = null;
             state.isLoggedIn = false;
         },
+        [fetchCurrentUser.pending]: state => {
+            state.isFetching = true;
+        },
+        [fetchCurrentUser.rejected]: state => {
+            state.isFetching = false;
+        },
     },
 });
-const userReducer = user.reducer;
+const userReducer = userSlice.reducer;
 
 export {
     itemsReducer,

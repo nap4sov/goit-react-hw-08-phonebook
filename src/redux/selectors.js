@@ -17,3 +17,5 @@ export const getErrorMessage = state => state.error;
 export const getUserEmail = state => state.user.email;
 
 export const getIsLoggedIn = state => state.user.isLoggedIn;
+
+export const getIsFetchingCurrentUser = state => state.user.isFetching;

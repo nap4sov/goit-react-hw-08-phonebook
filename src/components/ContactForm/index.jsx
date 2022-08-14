@@ -8,10 +8,12 @@ const ContactForm = () => {
     const dispatch = useDispatch();
     const contacts = useSelector(getContacts);
     const [name, setName] = useState('');
-    const [phone, setPhone] = useState('');
+    const [number, setNumber] = useState('');
 
     const listContainsContact = contact => {
-        return contacts.some(({ name }) => name.toLowerCase() === contact.name.toLowerCase());
+        return contacts.some(
+            ({ name }) => name.toLowerCase() === contact.name.toLowerCase(),
+        );
     };
 
     const handleInput = event => {
@@ -21,8 +23,8 @@ const ContactForm = () => {
             case 'name':
                 setName(value);
                 break;
-            case 'phone':
-                setPhone(value);
+            case 'number':
+                setNumber(value);
                 break;
 
             default:
@@ -32,7 +34,7 @@ const ContactForm = () => {
 
     const handleSubmit = event => {
         event.preventDefault();
-        const contact = { name, phone };
+        const contact = { name, number };
 
         if (listContainsContact(contact)) {
             return alert(`${contact.name} is already in contacts.`);
@@ -40,7 +42,7 @@ const ContactForm = () => {
 
         dispatch(addContact(contact));
         setName('');
-        setPhone('');
+        setNumber('');
     };
 
     return (
@@ -64,10 +66,10 @@ const ContactForm = () => {
                 Number
                 <input
                     onChange={handleInput}
-                    value={phone}
+                    value={number}
                     className={styles.input}
                     type="tel"
-                    name="phone"
+                    name="number"
                     pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
                     title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
                     required

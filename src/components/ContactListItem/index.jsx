@@ -3,7 +3,7 @@ import { deleteContact } from 'redux/operations';
 import PropTypes from 'prop-types';
 import styles from './styles.module.scss';
 
-const ContactListItem = ({ id, name, phone }) => {
+const ContactListItem = ({ id, name, number }) => {
     const dispatch = useDispatch();
 
     const onDeleteClick = () => {
@@ -13,9 +13,14 @@ const ContactListItem = ({ id, name, phone }) => {
     return (
         <li className={styles.listItem}>
             <span>
-                {name}: {phone}
+                {name}: {number}
             </span>
-            <button onClick={onDeleteClick} id={id} className={styles.button} type="button">
+            <button
+                onClick={onDeleteClick}
+                id={id}
+                className={styles.button}
+                type="button"
+            >
                 x
             </button>
         </li>
@@ -25,7 +30,7 @@ const ContactListItem = ({ id, name, phone }) => {
 ContactListItem.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    phone: PropTypes.string.isRequired,
+    number: PropTypes.string.isRequired,
 };
 
 export default ContactListItem;
