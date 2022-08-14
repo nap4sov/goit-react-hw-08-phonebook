@@ -13,3 +13,7 @@ export const getFilteredContacts = state => {
 export const contactsIsEmpty = state => getContacts(state).length === 0;
 
 export const getErrorMessage = state => state.error;
+
+export const getUserEmail = state => state.user.email;
+
+export const getIsLoggedIn = state => state.user.isLoggedIn;
