@@ -1,7 +1,8 @@
-import { Formik, Field, Form } from 'formik';
+import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { registerUser } from 'redux/operations';
+import { Button, TextField } from '@mui/material';
 
 const RegistrationForm = () => {
     const dispatch = useDispatch();
@@ -11,7 +12,6 @@ const RegistrationForm = () => {
         setSubmitting(false);
         resetForm();
     };
-
     const SignupSchema = Yup.object().shape({
         name: Yup.string()
             .min(2, 'Too Short!')
@@ -27,39 +27,62 @@ const RegistrationForm = () => {
             .required('Required'),
     });
 
+    const formik = useFormik({
+        initialValues: { name: '', email: '', password: '' },
+        onSubmit: handleSubmit,
+        validationSchema: SignupSchema,
+    });
+
     return (
-        <Formik
-            initialValues={{ name: '', email: '', password: '' }}
-            validationSchema={SignupSchema}
-            onSubmit={handleSubmit}
+        <form
+            onSubmit={formik.handleSubmit}
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+            }}
         >
-            {({ errors, touched }) => (
-                <Form>
-                    <label>
-                        Username
-                        <Field name="name" type="text" />
-                        {errors.name && touched.name ? (
-                            <span>{errors.name}</span>
-                        ) : null}
-                    </label>
-                    <label>
-                        Email
-                        <Field name="email" type="email" />
-                        {errors.email && touched.email ? (
-                            <span>{errors.email}</span>
-                        ) : null}
-                    </label>
-                    <label>
-                        Password
-                        <Field name="password" type="password" />
-                        {errors.password && touched.password ? (
-                            <span>{errors.password}</span>
-                        ) : null}
-                    </label>
-                    <button type="submit">Register</button>
-                </Form>
-            )}
-        </Formik>
+            <TextField
+                name="name"
+                type="text"
+                label="Name"
+                variant="standard"
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                sx={{ width: '300px', marginBottom: 2 }}
+                error={formik.touched.name && Boolean(formik.errors.name)}
+                helperText={formik.touched.name && formik.errors.name}
+            />
+            <TextField
+                name="email"
+                type="email"
+                label="Email"
+                variant="standard"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                sx={{ width: '300px', marginBottom: 2 }}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
+            />
+
+            <TextField
+                name="password"
+                type="password"
+                label="Password"
+                variant="standard"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                sx={{ width: '300px', marginBottom: 2 }}
+                error={
+                    formik.touched.password && Boolean(formik.errors.password)
+                }
+                helperText={formik.touched.password && formik.errors.password}
+            />
+
+            <Button variant="contained" type="submit">
+                Register
+            </Button>
+        </form>
     );
 };
 

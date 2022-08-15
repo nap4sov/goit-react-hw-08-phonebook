@@ -1,39 +1,53 @@
 import UserMenu from 'components/UserMenu';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getIsLoggedIn } from 'redux/selectors';
-import styles from './styles.module.scss';
+import { AppBar, Button } from '@mui/material';
 
 const Navigation = () => {
     const isLoggedIn = useSelector(getIsLoggedIn);
+    const location = useLocation();
 
     return (
-        <header className={styles.header}>
+        <AppBar
+            position="static"
+            color={isLoggedIn ? 'secondary' : 'primary'}
+            sx={{ padding: 2 }}
+        >
             {isLoggedIn ? (
                 <UserMenu />
             ) : (
                 <nav>
-                    <NavLink
+                    <Button
+                        component={NavLink}
                         to="/login"
-                        className={({ isActive }) =>
-                            styles.link +
-                            (isActive ? ` ${styles.activeLink}` : '')
-                        }
+                        sx={{
+                            marginRight: 2,
+                            color: 'white',
+                            border:
+                                location.pathname === '/login'
+                                    ? '1px solid white'
+                                    : 'inherit',
+                        }}
                     >
                         Login
-                    </NavLink>
-                    <NavLink
+                    </Button>
+                    <Button
+                        component={NavLink}
                         to="/register"
-                        className={({ isActive }) =>
-                            styles.link +
-                            (isActive ? ` ${styles.activeLink}` : '')
-                        }
+                        sx={{
+                            color: 'white',
+                            border:
+                                location.pathname === '/register'
+                                    ? '1px solid white'
+                                    : 'inherit',
+                        }}
                     >
                         Register
-                    </NavLink>
+                    </Button>
                 </nav>
             )}
-        </header>
+        </AppBar>
     );
 };
 export default Navigation;

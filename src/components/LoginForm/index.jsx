@@ -1,32 +1,54 @@
-import { Formik, Field, Form } from 'formik';
+import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { logInUser } from 'redux/operations';
+import { Button, TextField } from '@mui/material';
 
 const LoginForm = () => {
     const dispatch = useDispatch();
+
     const handleSubmit = (userData, { setSubmitting, resetForm }) => {
         dispatch(logInUser(userData));
         setSubmitting(false);
         resetForm();
     };
+    const formik = useFormik({
+        initialValues: { email: '', password: '' },
+        onSubmit: handleSubmit,
+    });
 
     return (
-        <Formik
-            initialValues={{ email: '', password: '' }}
-            onSubmit={handleSubmit}
+        <form
+            onSubmit={formik.handleSubmit}
+            style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+            }}
         >
-            <Form>
-                <label>
-                    Email
-                    <Field name="email" type="email" />
-                </label>
-                <label>
-                    Password
-                    <Field name="password" type="password" />
-                </label>
-                <button type="submit">Log in</button>
-            </Form>
-        </Formik>
+            <TextField
+                name="email"
+                type="email"
+                label="Email"
+                variant="standard"
+                value={formik.values.email}
+                onChange={formik.handleChange}
+                sx={{ width: '300px', marginBottom: 2 }}
+            />
+
+            <TextField
+                name="password"
+                type="password"
+                label="Password"
+                variant="standard"
+                value={formik.values.password}
+                onChange={formik.handleChange}
+                sx={{ width: '300px', marginBottom: 2 }}
+            />
+
+            <Button variant="contained" type="submit">
+                Log in
+            </Button>
+        </form>
     );
 };
 
