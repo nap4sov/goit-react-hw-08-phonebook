@@ -4,11 +4,14 @@ import {
     Card,
     CardContent,
     CardActions,
+    CardHeader,
     Typography,
     IconButton,
     Link,
+    Avatar,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import PhoneIcon from '@mui/icons-material/Phone';
 import PropTypes from 'prop-types';
 
 const ContactListItem = ({ id, name, number }) => {
@@ -23,22 +26,28 @@ const ContactListItem = ({ id, name, number }) => {
             sx={{
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'space-between',
                 background: 'rgba(200,200,200,0.5)',
             }}
         >
-            <CardContent>
+            <CardHeader
+                sx={{ paddingRight: 0 }}
+                avatar={<Avatar>{name[0]}</Avatar>}
+            />
+
+            <CardContent sx={{ padding: 0 }}>
                 <Typography variant="button">{name}</Typography>
                 <Link
                     href={`tel:${number}`}
                     underline="hover"
-                    color="inherit"
-                    display="block"
+                    color="text.secondary"
+                    display="flex"
+                    sx={{ alignItems: 'center' }}
                 >
+                    <PhoneIcon fontSize="small" sx={{ marginRight: 0.5 }} />
                     {number}
                 </Link>
             </CardContent>
-            <CardActions>
+            <CardActions sx={{ marginLeft: 'auto' }}>
                 <IconButton aria-label="delete" onClick={onDeleteClick}>
                     <DeleteIcon fontSize="medium" />
                 </IconButton>

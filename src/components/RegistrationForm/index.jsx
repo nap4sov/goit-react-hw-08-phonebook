@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { registerUser } from 'redux/operations';
 import { Button, TextField } from '@mui/material';
+import HowToRegIcon from '@mui/icons-material/HowToReg';
 
 const RegistrationForm = () => {
     const dispatch = useDispatch();
@@ -79,7 +80,11 @@ const RegistrationForm = () => {
                 helperText={formik.touched.password && formik.errors.password}
             />
 
-            <Button variant="contained" type="submit">
+            <Button
+                variant="contained"
+                type="submit"
+                startIcon={<HowToRegIcon />}
+            >
                 Register
             </Button>
         </form>

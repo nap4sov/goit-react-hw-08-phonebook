@@ -1,7 +1,9 @@
 import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { logInUser } from 'redux/operations';
 import { Button, TextField } from '@mui/material';
+import LoginIcon from '@mui/icons-material/Login';
 
 const LoginForm = () => {
     const dispatch = useDispatch();
@@ -11,9 +13,20 @@ const LoginForm = () => {
         setSubmitting(false);
         resetForm();
     };
+    const LoginSchema = Yup.object().shape({
+        password: Yup.string()
+            .min(7, 'Too Short!')
+            .max(20, 'Too Long!')
+            .required('Required'),
+        email: Yup.string()
+            .min(17, 'Too Short!')
+            .email('Invalid email')
+            .required('Required'),
+    });
     const formik = useFormik({
         initialValues: { email: '', password: '' },
         onSubmit: handleSubmit,
+        validationSchema: LoginSchema,
     });
 
     return (
@@ -33,6 +46,8 @@ const LoginForm = () => {
                 value={formik.values.email}
                 onChange={formik.handleChange}
                 sx={{ width: '300px', marginBottom: 2 }}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
             />
 
             <TextField
@@ -43,9 +58,13 @@ const LoginForm = () => {
                 value={formik.values.password}
                 onChange={formik.handleChange}
                 sx={{ width: '300px', marginBottom: 3 }}
+                error={
+                    formik.touched.password && Boolean(formik.errors.password)
+                }
+                helperText={formik.touched.password && formik.errors.password}
             />
 
-            <Button variant="contained" type="submit">
+            <Button variant="contained" type="submit" startIcon={<LoginIcon />}>
                 Log in
             </Button>
         </form>

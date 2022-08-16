@@ -30,7 +30,7 @@ const Navigation = () => {
                                     : 'inherit',
                         }}
                     >
-                        Login
+                        Log In
                     </Button>
                     <Button
                         component={NavLink}

@@ -4,7 +4,6 @@ import ContactListItem from 'components/ContactListItem';
 import Notification from 'components/Notification';
 import { fetchContacts } from 'redux/operations';
 import {
-    getIsLoading,
     getFilteredContacts,
     contactsIsEmpty,
     getErrorMessage,
@@ -17,14 +16,10 @@ const ContactList = () => {
         dispatch(fetchContacts());
     }, [dispatch]);
 
-    const isLoading = useSelector(getIsLoading);
     const contactsListEmpty = useSelector(contactsIsEmpty);
     const filteredContacts = useSelector(getFilteredContacts);
     const errorMessage = useSelector(getErrorMessage);
 
-    if (isLoading) {
-        return <p>Loading...</p>;
-    }
     if (errorMessage) {
         return <Notification title={errorMessage} />;
     }
