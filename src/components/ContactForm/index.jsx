@@ -1,14 +1,23 @@
-import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useFormik } from 'formik';
+import * as Yup from 'yup';
 import { addContact } from 'redux/operations';
 import { getContacts } from 'redux/selectors';
-import styles from './styles.module.scss';
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Typography,
+    IconButton,
+    TextField,
+} from '@mui/material';
+
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 const ContactForm = () => {
     const dispatch = useDispatch();
     const contacts = useSelector(getContacts);
-    const [name, setName] = useState('');
-    const [number, setNumber] = useState('');
 
     const listContainsContact = contact => {
         return contacts.some(
@@ -16,69 +25,90 @@ const ContactForm = () => {
         );
     };
 
-    const handleInput = event => {
-        const { name, value } = event.currentTarget;
-
-        switch (name) {
-            case 'name':
-                setName(value);
-                break;
-            case 'number':
-                setNumber(value);
-                break;
-
-            default:
-                break;
-        }
-    };
-
-    const handleSubmit = event => {
-        event.preventDefault();
-        const contact = { name, number };
-
+    const handleSubmit = (contact, { setSubmitting, resetForm }) => {
         if (listContainsContact(contact)) {
             return alert(`${contact.name} is already in contacts.`);
         }
-
         dispatch(addContact(contact));
-        setName('');
-        setNumber('');
+        setSubmitting(false);
+        resetForm();
     };
 
+    const ContactSchema = Yup.object().shape({
+        name: Yup.string()
+            .matches(
+                /^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$/,
+                "Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan",
+            )
+            .required('Required'),
+        number: Yup.string()
+            .matches(
+                /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/,
+                'Phone number must be digits and can contain spaces, dashes, parentheses and can start with +',
+            )
+            .required('Required'),
+    });
+
+    const formik = useFormik({
+        initialValues: { name: '', number: '' },
+        onSubmit: handleSubmit,
+        validationSchema: ContactSchema,
+    });
+
     return (
-        <form onSubmit={handleSubmit} className={styles.form}>
-            <label className={styles.label}>
-                {' '}
-                Name
-                <input
-                    onChange={handleInput}
-                    value={name}
-                    className={styles.input}
-                    type="text"
-                    name="name"
-                    pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-                    title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-                    required
-                />
-            </label>
-            <label className={styles.label}>
-                {' '}
-                Number
-                <input
-                    onChange={handleInput}
-                    value={number}
-                    className={styles.input}
-                    type="tel"
-                    name="number"
-                    pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-                    title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-                    required
-                />
-            </label>
-            <button className={styles.button} type="submit">
-                Add contact
-            </button>
-        </form>
+        <Accordion sx={{ background: 'rgba(200,200,200,0.5)' }}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography sx={{ color: 'black' }}>Add new contact</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+                <form
+                    onSubmit={formik.handleSubmit}
+                    style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <TextField
+                        name="name"
+                        type="text"
+                        label="Name"
+                        variant="standard"
+                        value={formik.values.name}
+                        onChange={formik.handleChange}
+                        fullWidth
+                        error={
+                            formik.touched.name && Boolean(formik.errors.name)
+                        }
+                        helperText={formik.touched.name && formik.errors.name}
+                    />
+                    <TextField
+                        name="number"
+                        type="tel"
+                        label="Phone number"
+                        variant="standard"
+                        value={formik.values.number}
+                        onChange={formik.handleChange}
+                        sx={{ marginBottom: 3 }}
+                        fullWidth
+                        error={
+                            formik.touched.number &&
+                            Boolean(formik.errors.number)
+                        }
+                        helperText={
+                            formik.touched.number && formik.errors.number
+                        }
+                    />
+                    <IconButton
+                        variant="contained"
+                        type="submit"
+                        aria-label="add"
+                    >
+                        <AddCircleIcon fontSize="large" />
+                    </IconButton>
+                </form>
+            </AccordionDetails>
+        </Accordion>
     );
 };
 

@@ -1,10 +1,14 @@
-import PropTypes from 'prop-types'
-import styles from './styles.module.scss'
+import { Typography } from '@mui/material';
+import PropTypes from 'prop-types';
 
-const Notification = ({ title }) => <p className={styles.warning}>{title}</p>
+const Notification = ({ title }) => (
+    <Typography color="error" variant="button">
+        {title}
+    </Typography>
+);
 
 Notification.propTypes = {
-    title: PropTypes.string.isRequired
-}
+    title: PropTypes.string.isRequired,
+};
 
-export default Notification
+export default Notification;

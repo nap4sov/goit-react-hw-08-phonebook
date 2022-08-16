@@ -72,7 +72,7 @@ const RegistrationForm = () => {
                 variant="standard"
                 value={formik.values.password}
                 onChange={formik.handleChange}
-                sx={{ width: '300px', marginBottom: 2 }}
+                sx={{ width: '300px', marginBottom: 3 }}
                 error={
                     formik.touched.password && Boolean(formik.errors.password)
                 }

@@ -1,11 +1,18 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { filterContacts } from 'redux/actions';
-import { getFilterValue } from 'redux/selectors';
-import styles from './styles.module.scss';
+import { contactsIsEmpty } from 'redux/selectors';
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    Typography,
+    TextField,
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const Filter = () => {
     const dispatch = useDispatch();
-    const filterValue = useSelector(getFilterValue);
+    const contactListEmpty = useSelector(contactsIsEmpty);
 
     const handleInputChange = event => {
         const value = event.target.value;
@@ -13,17 +20,26 @@ const Filter = () => {
     };
 
     return (
-        <div className={styles.wrapper}>
-            <label>
-                Find contacts by name
-                <input
+        <Accordion
+            sx={{
+                background: 'rgba(200,200,200,0.5)',
+            }}
+            disabled={contactListEmpty ? true : false}
+        >
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography sx={{ color: 'black' }}>
+                    Find contacts by name
+                </Typography>
+            </AccordionSummary>
+            <AccordionDetails sx={{ textAlign: 'center' }}>
+                <TextField
                     onChange={handleInputChange}
-                    value={filterValue}
-                    type="text"
-                    className={styles.input}
+                    variant="standard"
+                    label="Start entering name"
+                    fullWidth
                 />
-            </label>
-        </div>
+            </AccordionDetails>
+        </Accordion>
     );
 };
 

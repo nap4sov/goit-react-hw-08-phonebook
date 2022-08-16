@@ -42,7 +42,7 @@ const LoginForm = () => {
                 variant="standard"
                 value={formik.values.password}
                 onChange={formik.handleChange}
-                sx={{ width: '300px', marginBottom: 2 }}
+                sx={{ width: '300px', marginBottom: 3 }}
             />
 
             <Button variant="contained" type="submit">

@@ -1,7 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserEmail } from 'redux/selectors';
 import { logOutUser } from 'redux/operations';
-import { Button, Typography } from '@mui/material';
+import { Button, IconButton, Typography } from '@mui/material';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 const UserMenu = () => {
     const userName = useSelector(getUserEmail);
@@ -9,18 +10,31 @@ const UserMenu = () => {
     const handleBtnClick = () => {
         dispatch(logOutUser());
     };
+
+    const isDeviceMobile = window.innerWidth <= 600;
+
     return (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Typography sx={{ marginRight: 2 }}>Welcome, {userName}</Typography>
+            <Typography>Welcome, {userName}</Typography>
 
-            <Button
-                onClick={handleBtnClick}
-                variant="contained"
-                color="error"
-                sx={{ marginLeft: 'auto' }}
-            >
-                Log out
-            </Button>
+            {isDeviceMobile ? (
+                <IconButton
+                    onClick={handleBtnClick}
+                    sx={{ marginLeft: 'auto', color: 'white' }}
+                >
+                    <LogoutIcon />
+                </IconButton>
+            ) : (
+                <Button
+                    onClick={handleBtnClick}
+                    endIcon={<LogoutIcon />}
+                    variant="contained"
+                    color="error"
+                    sx={{ marginLeft: 'auto' }}
+                >
+                    Log out
+                </Button>
+            )}
         </div>
     );
 };
