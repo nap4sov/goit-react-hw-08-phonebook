@@ -1,12 +1,14 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from 'redux/operations';
-import { Button, TextField } from '@mui/material';
+import { getIsLoading } from 'redux/selectors';
+import { Button, TextField, CircularProgress } from '@mui/material';
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 
 const RegistrationForm = () => {
     const dispatch = useDispatch();
+    const isLoading = useSelector(getIsLoading);
 
     const handleSubmit = (userData, { setSubmitting, resetForm }) => {
         dispatch(registerUser(userData));
@@ -83,7 +85,13 @@ const RegistrationForm = () => {
             <Button
                 variant="contained"
                 type="submit"
-                startIcon={<HowToRegIcon />}
+                startIcon={
+                    isLoading ? (
+                        <CircularProgress size={20} sx={{ color: 'white' }} />
+                    ) : (
+                        <HowToRegIcon />
+                    )
+                }
             >
                 Register
             </Button>

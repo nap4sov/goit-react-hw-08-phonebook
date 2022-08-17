@@ -1,11 +1,12 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { getUserEmail } from 'redux/selectors';
+import { getUserEmail, getIsLoading } from 'redux/selectors';
 import { logOutUser } from 'redux/operations';
-import { Button, IconButton, Typography } from '@mui/material';
+import { Button, IconButton, Typography, LinearProgress } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 const UserMenu = () => {
     const userName = useSelector(getUserEmail);
+    const isLoading = useSelector(getIsLoading);
     const dispatch = useDispatch();
     const handleBtnClick = () => {
         dispatch(logOutUser());
@@ -16,6 +17,19 @@ const UserMenu = () => {
     return (
         <div style={{ display: 'flex', alignItems: 'center' }}>
             <Typography>Welcome, {userName}</Typography>
+
+            {isLoading && (
+                <LinearProgress
+                    color="secondary"
+                    sx={{
+                        position: 'absolute',
+                        left: 0,
+                        bottom: 0,
+                        zIndex: 1300,
+                        width: '100%',
+                    }}
+                />
+            )}
 
             {isDeviceMobile ? (
                 <IconButton

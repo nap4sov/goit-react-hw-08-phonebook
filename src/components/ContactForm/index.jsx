@@ -3,6 +3,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { addContact } from 'redux/operations';
 import { getContacts } from 'redux/selectors';
+import { setError } from 'redux/actions';
 import {
     Accordion,
     AccordionDetails,
@@ -27,7 +28,8 @@ const ContactForm = () => {
 
     const handleSubmit = (contact, { setSubmitting, resetForm }) => {
         if (listContainsContact(contact)) {
-            return alert(`${contact.name} is already in contacts.`);
+            dispatch(setError(`${contact.name} is already in contacts.`));
+            return;
         }
         dispatch(addContact(contact));
         setSubmitting(false);
@@ -56,7 +58,7 @@ const ContactForm = () => {
     });
 
     return (
-        <Accordion sx={{ background: 'rgba(200,200,200,0.5)' }}>
+        <Accordion sx={{ background: 'transparent' }} elevation={0}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography sx={{ color: 'black' }}>Add new contact</Typography>
             </AccordionSummary>

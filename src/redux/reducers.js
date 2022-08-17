@@ -1,5 +1,5 @@
 import { createReducer, createSlice } from '@reduxjs/toolkit';
-import { filterContacts } from './actions';
+import { filterContacts, setError } from './actions';
 import {
     fetchContacts,
     addContact,
@@ -10,56 +10,75 @@ import {
     fetchCurrentUser,
 } from './operations';
 
-const itemsReducer = createReducer([], {
-    [fetchContacts.fulfilled]: (_, { payload }) => payload,
-    [addContact.fulfilled]: (state, { payload }) => [payload, ...state],
-    [deleteContact.fulfilled]: (state, { payload }) =>
-        state.filter(({ id }) => id !== payload),
-});
-
-const filterReducer = createReducer('', {
-    [filterContacts]: (_, { payload }) => payload,
-});
-
-const loadingReducer = createReducer(false, {
-    [fetchContacts.pending]: () => true,
-    [fetchContacts.fulfilled]: () => false,
-    [fetchContacts.rejected]: () => false,
-    [addContact.pending]: () => true,
-    [addContact.fulfilled]: () => false,
-    [addContact.rejected]: () => false,
-    [deleteContact.pending]: () => true,
-    [deleteContact.fulfilled]: () => false,
-    [deleteContact.rejected]: () => false,
-    [fetchCurrentUser.pending]: () => true,
-    [fetchCurrentUser.fulfilled]: () => false,
-    [fetchCurrentUser.rejected]: () => false,
-    [registerUser.pending]: () => true,
-    [registerUser.fulfilled]: () => false,
-    [registerUser.rejected]: () => false,
-    [logInUser.pending]: () => true,
-    [logInUser.fulfilled]: () => false,
-    [logInUser.rejected]: () => false,
-    [logOutUser.pending]: () => true,
-    [logOutUser.fulfilled]: () => false,
-    [logOutUser.rejected]: () => false,
-});
-
-const errorReducer = createReducer(null, {
-    [fetchContacts.rejected]: (_, { error }) => error.message,
-    [fetchContacts.pending]: () => null,
-    [addContact.rejected]: (_, { error }) => error.message,
-    [addContact.pending]: () => null,
-    [deleteContact.rejected]: (_, { error }) => error.message,
-    [deleteContact.pending]: () => null,
-    [fetchCurrentUser.rejected]: (_, { error }) => error.message,
-    [fetchCurrentUser.pending]: () => null,
-    [registerUser.rejected]: (_, { error }) => error.message,
-    [registerUser.pending]: () => null,
-    [logInUser.rejected]: (_, { error }) => error.message,
-    [logInUser.pending]: () => null,
-    [logOutUser.rejected]: (_, { error }) => error.message,
-    [logOutUser.pending]: () => null,
+const contactsSlice = createSlice({
+    name: 'contacts',
+    initialState: {
+        items: [],
+        filter: '',
+        loading: false,
+    },
+    extraReducers: {
+        [filterContacts]: (state, { payload }) => {
+            state.filter = payload;
+        },
+        [fetchContacts.fulfilled]: (state, { payload }) => {
+            state.items = payload;
+            state.loading = false;
+        },
+        [fetchContacts.pending]: state => {
+            state.loading = true;
+        },
+        [fetchContacts.rejected]: state => {
+            state.loading = false;
+        },
+        [addContact.fulfilled]: (state, { payload }) => {
+            state.items = [payload, ...state.items];
+            state.loading = false;
+        },
+        [addContact.pending]: state => {
+            state.loading = true;
+        },
+        [addContact.rejected]: state => {
+            state.loading = false;
+        },
+        [deleteContact.fulfilled]: (state, { payload }) => {
+            state.items = state.items.filter(({ id }) => id !== payload);
+            state.loading = false;
+        },
+        [deleteContact.pending]: state => {
+            state.loading = true;
+        },
+        [deleteContact.rejected]: state => {
+            state.loading = false;
+        },
+        [registerUser.pending]: state => {
+            state.loading = true;
+        },
+        [registerUser.fulfilled]: state => {
+            state.loading = false;
+        },
+        [registerUser.rejected]: state => {
+            state.loading = false;
+        },
+        [logInUser.pending]: state => {
+            state.loading = true;
+        },
+        [logInUser.fulfilled]: state => {
+            state.loading = false;
+        },
+        [logInUser.rejected]: state => {
+            state.loading = false;
+        },
+        [logOutUser.pending]: state => {
+            state.loading = true;
+        },
+        [logOutUser.fulfilled]: state => {
+            state.loading = false;
+        },
+        [logOutUser.rejected]: state => {
+            state.loading = false;
+        },
+    },
 });
 
 const userSlice = createSlice({
@@ -104,12 +123,26 @@ const userSlice = createSlice({
         },
     },
 });
+
+const errorReducer = createReducer(null, {
+    [fetchContacts.rejected]: (_, { error }) => error.message,
+    [fetchContacts.pending]: () => null,
+    [addContact.rejected]: (_, { error }) => error.message,
+    [addContact.pending]: () => null,
+    [deleteContact.rejected]: (_, { error }) => error.message,
+    [deleteContact.pending]: () => null,
+    [fetchCurrentUser.rejected]: (_, { error }) => error.message,
+    [fetchCurrentUser.pending]: () => null,
+    [registerUser.rejected]: (_, { error }) => error.message,
+    [registerUser.pending]: () => null,
+    [logInUser.rejected]: (_, { error }) => error.message,
+    [logInUser.pending]: () => null,
+    [logOutUser.rejected]: (_, { error }) => error.message,
+    [logOutUser.pending]: () => null,
+    [setError]: (_, { payload }) => payload,
+});
+
+const contactsReducer = contactsSlice.reducer;
 const userReducer = userSlice.reducer;
 
-export {
-    itemsReducer,
-    filterReducer,
-    loadingReducer,
-    errorReducer,
-    userReducer,
-};
+export { errorReducer, userReducer, contactsReducer };

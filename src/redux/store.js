@@ -1,8 +1,4 @@
-import {
-    configureStore,
-    getDefaultMiddleware,
-    combineReducers,
-} from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import {
     persistStore,
     persistReducer,
@@ -14,13 +10,7 @@ import {
     PURGE,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import {
-    itemsReducer,
-    filterReducer,
-    loadingReducer,
-    errorReducer,
-    userReducer,
-} from './reducers';
+import { errorReducer, userReducer, contactsReducer } from './reducers';
 
 const userPersistConfig = {
     key: 'user',
@@ -31,11 +21,7 @@ const userPersistConfig = {
 const persistedUserReducer = persistReducer(userPersistConfig, userReducer);
 
 const rootReducer = {
-    contacts: combineReducers({
-        items: itemsReducer,
-        filter: filterReducer,
-        loading: loadingReducer,
-    }),
+    contacts: contactsReducer,
     user: persistedUserReducer,
     error: errorReducer,
 };

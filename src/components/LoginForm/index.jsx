@@ -1,12 +1,14 @@
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { logInUser } from 'redux/operations';
-import { Button, TextField } from '@mui/material';
+import { getIsLoading } from 'redux/selectors';
+import { Button, TextField, CircularProgress } from '@mui/material';
 import LoginIcon from '@mui/icons-material/Login';
 
 const LoginForm = () => {
     const dispatch = useDispatch();
+    const isLoading = useSelector(getIsLoading);
 
     const handleSubmit = (userData, { setSubmitting, resetForm }) => {
         dispatch(logInUser(userData));
@@ -64,7 +66,17 @@ const LoginForm = () => {
                 helperText={formik.touched.password && formik.errors.password}
             />
 
-            <Button variant="contained" type="submit" startIcon={<LoginIcon />}>
+            <Button
+                variant="contained"
+                type="submit"
+                startIcon={
+                    isLoading ? (
+                        <CircularProgress size={20} sx={{ color: 'white' }} />
+                    ) : (
+                        <LoginIcon />
+                    )
+                }
+            >
                 Log in
             </Button>
         </form>

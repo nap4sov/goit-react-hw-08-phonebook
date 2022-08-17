@@ -10,7 +10,7 @@ const Navigation = () => {
 
     return (
         <AppBar
-            position="static"
+            position="sticky"
             color={isLoggedIn ? 'secondary' : 'primary'}
             sx={{ padding: 2 }}
         >

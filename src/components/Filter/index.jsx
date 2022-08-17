@@ -21,9 +21,8 @@ const Filter = () => {
 
     return (
         <Accordion
-            sx={{
-                background: 'rgba(200,200,200,0.5)',
-            }}
+            sx={{ background: 'transparent' }}
+            elevation={0}
             disabled={contactListEmpty ? true : false}
         >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>

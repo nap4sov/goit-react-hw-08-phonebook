@@ -1,33 +1,33 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import ContactListItem from 'components/ContactListItem';
-import Notification from 'components/Notification';
 import { fetchContacts } from 'redux/operations';
-import {
-    getFilteredContacts,
-    contactsIsEmpty,
-    getErrorMessage,
-} from 'redux/selectors';
-import { Stack, Paper } from '@mui/material';
+import { getFilteredContacts, contactsIsEmpty } from 'redux/selectors';
+import { Stack, Paper, Alert } from '@mui/material';
 
 const ContactList = () => {
     const dispatch = useDispatch();
+
     useEffect(() => {
         dispatch(fetchContacts());
     }, [dispatch]);
 
     const contactsListEmpty = useSelector(contactsIsEmpty);
     const filteredContacts = useSelector(getFilteredContacts);
-    const errorMessage = useSelector(getErrorMessage);
 
-    if (errorMessage) {
-        return <Notification title={errorMessage} />;
-    }
     if (contactsListEmpty) {
-        return <Notification title="Contacts list is empty" />;
+        return (
+            <Alert variant="outlined" severity="info">
+                Contacts list is empty
+            </Alert>
+        );
     }
     if (!contactsListEmpty && filteredContacts.length === 0) {
-        return <Notification title="No contact with such name found" />;
+        return (
+            <Alert variant="outlined" severity="warning">
+                No contact with such name found
+            </Alert>
+        );
     }
 
     return (
