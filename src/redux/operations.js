@@ -73,3 +73,11 @@ export const deleteContact = createAsyncThunk(
         return id;
     },
 );
+
+export const updateContact = createAsyncThunk(
+    'contacts/updateContact',
+    async ({ id, contact }) => {
+        const { data } = await axios.patch(`/contacts/${id}`, contact);
+        return data;
+    },
+);

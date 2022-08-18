@@ -12,9 +12,10 @@ import {
     IconButton,
     TextField,
 } from '@mui/material';
-
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import ReactPhoneInput from 'react-phone-input-material-ui';
+import 'react-phone-input-material-ui/lib/style.css';
 
 const ContactForm = () => {
     const dispatch = useDispatch();
@@ -43,12 +44,7 @@ const ContactForm = () => {
                 "Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan",
             )
             .required('Required'),
-        number: Yup.string()
-            .matches(
-                /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/,
-                'Phone number must be digits and can contain spaces, dashes, parentheses and can start with +',
-            )
-            .required('Required'),
+        number: Yup.string().required('Required'),
     });
 
     const formik = useFormik({
@@ -56,6 +52,14 @@ const ContactForm = () => {
         onSubmit: handleSubmit,
         validationSchema: ContactSchema,
     });
+
+    const onValueChange = phoneNumber => {
+        formik.setFieldValue('number', phoneNumber);
+
+        if (formik.handleChange !== null) {
+            formik.handleChange(phoneNumber);
+        }
+    };
 
     return (
         <Accordion sx={{ background: 'transparent' }} elevation={0}>
@@ -79,20 +83,23 @@ const ContactForm = () => {
                         value={formik.values.name}
                         onChange={formik.handleChange}
                         fullWidth
+                        sx={{ marginBottom: 1 }}
                         error={
                             formik.touched.name && Boolean(formik.errors.name)
                         }
                         helperText={formik.touched.name && formik.errors.name}
                     />
-                    <TextField
+                    <ReactPhoneInput
+                        style={{
+                            width: '100%',
+                        }}
                         name="number"
                         type="tel"
-                        label="Phone number"
-                        variant="standard"
+                        label="Phone"
+                        country="ua"
                         value={formik.values.number}
-                        onChange={formik.handleChange}
-                        sx={{ marginBottom: 3 }}
-                        fullWidth
+                        onChange={onValueChange}
+                        component={TextField}
                         error={
                             formik.touched.number &&
                             Boolean(formik.errors.number)
@@ -100,11 +107,16 @@ const ContactForm = () => {
                         helperText={
                             formik.touched.number && formik.errors.number
                         }
+                        inputProps={{
+                            variant: 'standard',
+                            fullWidth: true,
+                        }}
                     />
                     <IconButton
                         variant="contained"
                         type="submit"
                         aria-label="add"
+                        sx={{ marginTop: 1 }}
                     >
                         <AddCircleIcon fontSize="large" />
                     </IconButton>

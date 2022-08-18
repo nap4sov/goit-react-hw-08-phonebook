@@ -4,6 +4,7 @@ import {
     fetchContacts,
     addContact,
     deleteContact,
+    updateContact,
     registerUser,
     logInUser,
     logOutUser,
@@ -49,6 +50,18 @@ const contactsSlice = createSlice({
             state.loading = true;
         },
         [deleteContact.rejected]: state => {
+            state.loading = false;
+        },
+        [updateContact.fulfilled]: (state, { payload }) => {
+            state.items = state.items.map(contact =>
+                contact.id === payload.id ? payload : contact,
+            );
+            state.loading = false;
+        },
+        [updateContact.pending]: state => {
+            state.loading = true;
+        },
+        [updateContact.rejected]: state => {
             state.loading = false;
         },
         [registerUser.pending]: state => {

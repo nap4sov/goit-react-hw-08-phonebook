@@ -20,10 +20,7 @@ const LoginForm = () => {
             .min(7, 'Too Short!')
             .max(20, 'Too Long!')
             .required('Required'),
-        email: Yup.string()
-            .min(17, 'Too Short!')
-            .email('Invalid email')
-            .required('Required'),
+        email: Yup.string().email('Invalid email').required('Required'),
     });
     const formik = useFormik({
         initialValues: { email: '', password: '' },

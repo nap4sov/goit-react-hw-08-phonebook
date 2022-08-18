@@ -1,7 +1,6 @@
-import { Route, Routes } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import Navigation from './Navigation';
 import PrivateRoute from './PrivateRoute';
-import PublicRoute from './PublicRoute';
 import LoadingStrip from './LoadingStrip';
 import { useEffect, lazy, Suspense } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,19 +10,20 @@ import {
     getIsFetchingCurrentUser,
     getErrorMessage,
     getUserToken,
+    getIsLoggedIn,
 } from 'redux/selectors';
 import { Skeleton, Snackbar, Alert } from '@mui/material';
 
-const HomeView = lazy(() => import('./views/HomeView'));
-const LoginView = lazy(() => import('./views/LoginView'));
-const RegistrationView = lazy(() => import('./views/RegistrationView'));
+const LoginForm = lazy(() => import('./LoginForm'));
+const RegistrationForm = lazy(() => import('./RegistrationForm'));
 const PhonebookView = lazy(() => import('./views/PhonebookView'));
 
 export function App() {
     const dispatch = useDispatch();
+    const isLoggedIn = useSelector(getIsLoggedIn);
+    const userHasToken = useSelector(getUserToken);
     const isFetchingCurrentUser = useSelector(getIsFetchingCurrentUser);
     const errorMessage = useSelector(getErrorMessage);
-    const userHasToken = useSelector(getUserToken);
 
     useEffect(() => {
         if (!userHasToken) {
@@ -46,7 +46,7 @@ export function App() {
             <section style={{ padding: '16px' }}>
                 <Suspense fallback={<LoadingStrip />}>
                     <Routes>
-                        <Route path="/" element={<HomeView />} />
+                        <Route path="/" element={<Navigate to="/register" />} />
                         <Route
                             path="/contacts"
                             element={
@@ -58,17 +58,21 @@ export function App() {
                         <Route
                             path="/login"
                             element={
-                                <PublicRoute>
-                                    <LoginView />
-                                </PublicRoute>
+                                isLoggedIn ? (
+                                    <Navigate to="/contacts" />
+                                ) : (
+                                    <LoginForm />
+                                )
                             }
                         />
                         <Route
                             path="/register"
                             element={
-                                <PublicRoute>
-                                    <RegistrationView />
-                                </PublicRoute>
+                                isLoggedIn ? (
+                                    <Navigate to="/contacts" />
+                                ) : (
+                                    <RegistrationForm />
+                                )
                             }
                         />
                     </Routes>
