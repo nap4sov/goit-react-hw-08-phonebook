@@ -29,14 +29,7 @@ const LoginForm = () => {
     });
 
     return (
-        <form
-            onSubmit={formik.handleSubmit}
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-            }}
-        >
+        <form onSubmit={formik.handleSubmit}>
             <TextField
                 name="email"
                 type="email"
@@ -67,11 +60,7 @@ const LoginForm = () => {
                 variant="contained"
                 type="submit"
                 startIcon={
-                    isLoading ? (
-                        <CircularProgress size={20} sx={{ color: 'white' }} />
-                    ) : (
-                        <LoginIcon />
-                    )
+                    isLoading ? <CircularProgress size={20} /> : <LoginIcon />
                 }
             >
                 Log in

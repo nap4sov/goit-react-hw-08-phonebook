@@ -62,19 +62,12 @@ const ContactForm = () => {
     };
 
     return (
-        <Accordion sx={{ background: 'transparent' }} elevation={0}>
+        <Accordion elevation={0}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography sx={{ color: 'black' }}>Add new contact</Typography>
+                <Typography>Add new contact</Typography>
             </AccordionSummary>
             <AccordionDetails>
-                <form
-                    onSubmit={formik.handleSubmit}
-                    style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                    }}
-                >
+                <form onSubmit={formik.handleSubmit}>
                     <TextField
                         name="name"
                         type="text"
@@ -83,16 +76,12 @@ const ContactForm = () => {
                         value={formik.values.name}
                         onChange={formik.handleChange}
                         fullWidth
-                        sx={{ marginBottom: 1 }}
                         error={
                             formik.touched.name && Boolean(formik.errors.name)
                         }
                         helperText={formik.touched.name && formik.errors.name}
                     />
                     <ReactPhoneInput
-                        style={{
-                            width: '100%',
-                        }}
                         name="number"
                         type="tel"
                         label="Phone"

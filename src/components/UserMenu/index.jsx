@@ -15,8 +15,8 @@ const UserMenu = () => {
     const isDeviceMobile = window.innerWidth <= 600;
 
     return (
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Typography>Welcome, {userName}</Typography>
+        <div className="user-menu">
+            <Typography variant="h4">Welcome, {userName}</Typography>
 
             {isLoading && (
                 <LinearProgress

@@ -9,11 +9,7 @@ const Navigation = () => {
     const location = useLocation();
 
     return (
-        <AppBar
-            position="sticky"
-            color={isLoggedIn ? 'secondary' : 'primary'}
-            sx={{ padding: 2 }}
-        >
+        <AppBar position="sticky" color={isLoggedIn ? 'secondary' : 'primary'}>
             {isLoggedIn ? (
                 <UserMenu />
             ) : (

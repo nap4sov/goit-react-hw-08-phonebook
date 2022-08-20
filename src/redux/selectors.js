@@ -13,7 +13,7 @@ export const getFilteredContacts = createSelector(
         contacts.filter(({ name }) => name.toLowerCase().includes(filter)),
 );
 
-export const contactsIsEmpty = state => getContacts(state).length === 0;
+export const getContactsIsEmpty = state => getContacts(state).length === 0;
 
 export const getErrorMessage = state => state.error;
 

@@ -14,9 +14,12 @@ import {
 } from 'redux/selectors';
 import { Skeleton, Snackbar, Alert } from '@mui/material';
 
+import { ThemeProvider } from '@mui/material/styles';
+import theme from 'themes/theme';
+
 const LoginForm = lazy(() => import('./LoginForm'));
 const RegistrationForm = lazy(() => import('./RegistrationForm'));
-const PhonebookView = lazy(() => import('./views/PhonebookView'));
+const PhonebookView = lazy(() => import('../views/PhonebookView'));
 
 export function App() {
     const dispatch = useDispatch();
@@ -33,7 +36,7 @@ export function App() {
     }, [dispatch, userHasToken]);
 
     return (
-        <>
+        <ThemeProvider theme={theme}>
             {isFetchingCurrentUser ? (
                 <Skeleton
                     variant="rectangular"
@@ -43,7 +46,7 @@ export function App() {
             ) : (
                 <Navigation />
             )}
-            <section style={{ padding: '16px' }}>
+            <section>
                 <Suspense fallback={<LoadingStrip />}>
                     <Routes>
                         <Route path="/" element={<Navigate to="/register" />} />
@@ -88,6 +91,6 @@ export function App() {
                     {errorMessage}
                 </Alert>
             </Snackbar>
-        </>
+        </ThemeProvider>
     );
 }

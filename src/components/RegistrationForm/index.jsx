@@ -34,14 +34,7 @@ const RegistrationForm = () => {
     });
 
     return (
-        <form
-            onSubmit={formik.handleSubmit}
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-            }}
-        >
+        <form onSubmit={formik.handleSubmit}>
             <TextField
                 name="name"
                 type="text"
@@ -84,7 +77,7 @@ const RegistrationForm = () => {
                 type="submit"
                 startIcon={
                     isLoading ? (
-                        <CircularProgress size={20} sx={{ color: 'white' }} />
+                        <CircularProgress size={20} />
                     ) : (
                         <HowToRegIcon />
                     )

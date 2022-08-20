@@ -31,19 +31,10 @@ const ContactListItem = ({ id, name, number }) => {
     };
 
     return (
-        <Card
-            sx={{
-                display: 'flex',
-                alignItems: 'center',
-                background: 'rgba(200,200,200,0.5)',
-            }}
-        >
-            <CardHeader
-                sx={{ paddingRight: 0 }}
-                avatar={<Avatar>{name[0]}</Avatar>}
-            />
+        <Card>
+            <CardHeader avatar={<Avatar>{name[0]}</Avatar>} />
 
-            <CardContent sx={{ padding: 0 }}>
+            <CardContent>
                 <Typography variant="button">{name}</Typography>
                 <Link
                     href={`tel:${number}`}
@@ -55,39 +46,7 @@ const ContactListItem = ({ id, name, number }) => {
                     <PhoneIcon fontSize="small" sx={{ marginRight: 0.5 }} />
                     {number}
                 </Link>
-                {/* <Menu
-                    open={open}
-                    anchorEl={anchorEl}
-                    id="basic-menu"
-                    onClose={handleClose}
-                    MenuListProps={{
-                        'aria-labelledby': 'basic-button',
-                    }}
-                >
-                    <MenuItem>
-                        <TextField
-                            variant="standard"
-                            value={contactName}
-                            onChange={onNameEdit}
-                        />
-                    </MenuItem>
-                    <MenuItem>
-                        <TextField
-                            variant="standard"
-                            type="tel"
-                            value={contactNumber}
-                            onChange={onNumberEdit}
-                        />{' '}
-                    </MenuItem>
-                    <Box display="flex" justifyContent="space-evenly">
-                        <IconButton onClick={handleContactEdit}>
-                            <CheckIcon fontSize="medium" />
-                        </IconButton>
-                        <IconButton onClick={handleClose}>
-                            <ClearIcon fontSize="medium" />
-                        </IconButton>
-                    </Box>
-                </Menu> */}
+
                 <ContactEditMenu
                     name={name}
                     number={number}
@@ -96,7 +55,7 @@ const ContactListItem = ({ id, name, number }) => {
                     setAnchor={setAnchorEl}
                 />
             </CardContent>
-            <CardActions sx={{ marginLeft: 'auto' }}>
+            <CardActions>
                 <IconButton
                     aria-label="edit"
                     id="basic-button"

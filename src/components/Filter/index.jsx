@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { filterContacts } from 'redux/actions';
-import { contactsIsEmpty } from 'redux/selectors';
+import { getContactsIsEmpty } from 'redux/selectors';
 import {
     Accordion,
     AccordionDetails,
@@ -12,7 +12,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const Filter = () => {
     const dispatch = useDispatch();
-    const contactListEmpty = useSelector(contactsIsEmpty);
+    const contactsIsEmpty = useSelector(getContactsIsEmpty);
 
     const handleInputChange = event => {
         const value = event.target.value;
@@ -20,17 +20,11 @@ const Filter = () => {
     };
 
     return (
-        <Accordion
-            sx={{ background: 'transparent' }}
-            elevation={0}
-            disabled={contactListEmpty ? true : false}
-        >
+        <Accordion elevation={0} disabled={contactsIsEmpty ? true : false}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography sx={{ color: 'black' }}>
-                    Find contacts by name
-                </Typography>
+                <Typography>Find contacts by name</Typography>
             </AccordionSummary>
-            <AccordionDetails sx={{ textAlign: 'center' }}>
+            <AccordionDetails>
                 <TextField
                     onChange={handleInputChange}
                     variant="standard"

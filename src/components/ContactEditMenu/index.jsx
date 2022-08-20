@@ -73,7 +73,6 @@ const ContactEditMenu = ({ id, name, number, anchor, setAnchor }) => {
             </MenuItem>
             <MenuItem>
                 <ReactPhoneInput
-                    style={{ width: '100%' }}
                     name="number"
                     type="tel"
                     label="Phone"
